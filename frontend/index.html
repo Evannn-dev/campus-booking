@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Booking System</title>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     AUTH SECTION
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div id="auth-section" class="auth-container">
+    <div class="auth-card">
+        <h1 class="auth-title">🏛️ Campus Booking</h1>
+        <p class="auth-subtitle">Book study rooms &amp; labs across campus</p>
+
+        <div class="auth-tabs">
+            <button class="auth-tab active" data-tab="login">Login</button>
+            <button class="auth-tab" data-tab="register">Register</button>
+        </div>
+
+        <!-- Quick Fill -->
+        <div class="quick-fill">
+            <button type="button" id="qf-admin" class="quick-fill-btn">🛡️ Demo Admin</button>
+            <button type="button" id="qf-student" class="quick-fill-btn">🎓 Demo Student</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="login-form" class="auth-form">
+            <div class="form-group">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" class="form-control" placeholder="you@campus.edu" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:0.5rem;">Login</button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="register-form" class="auth-form hidden">
+            <div class="form-group">
+                <label for="reg-name">Full Name</label>
+                <input type="text" id="reg-name" class="form-control" placeholder="Alice Johnson" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-email">Email</label>
+                <input type="email" id="reg-email" class="form-control" placeholder="you@campus.edu" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="reg-password">Password</label>
+                    <input type="password" id="reg-password" class="form-control" placeholder="••••••••" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-roll">Roll Number</label>
+                    <input type="text" id="reg-roll" class="form-control" placeholder="CS2024001">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:0.5rem;">Create Account</button>
+        </form>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     APP SECTION
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div id="app-section" class="hidden">
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand"><span>🏛️</span> Campus Booking</div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" id="tab-resources" data-tab="resources">📚 Resources</button>
+            <button class="nav-tab" id="tab-bookings" data-tab="bookings">📋 My Bookings</button>
+            <button class="nav-tab hidden" id="tab-admin" data-tab="admin">🛡️ Admin</button>
+        </div>
+        <div class="nav-right">
+            <span id="nav-user-info" class="nav-user"></span>
+            <button class="btn btn-outline btn-sm" id="btn-logout" style="color:white;border-color:rgba(255,255,255,0.3);">Logout</button>
+        </div>
+    </nav>
+
+    <!-- ── Resources Tab ─────────────────────────────────────────────────── -->
+    <div class="tab-content" id="content-resources">
+        <div class="container">
+            <div class="section-header">
+                <h2>📚 Campus Resources</h2>
+            </div>
+            <div class="filter-bar">
+                <div class="form-group">
+                    <label>Type</label>
+                    <select id="filter-type" class="form-control">
+                        <option value="all">All Types</option>
+                        <option value="study_room">Study Rooms</option>
+                        <option value="lab">Labs</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Min Capacity</label>
+                    <select id="filter-capacity" class="form-control">
+                        <option value="">Any</option>
+                        <option value="5">5+</option>
+                        <option value="10">10+</option>
+                        <option value="20">20+</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="filter-date" class="form-control">
+                </div>
+            </div>
+            <div class="resource-grid" id="resource-grid">
+                <!-- Resource cards rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ── My Bookings Tab ───────────────────────────────────────────────── -->
+    <div class="tab-content hidden" id="content-bookings">
+        <div class="container">
+            <div class="section-header">
+                <h2>📋 My Bookings</h2>
+            </div>
+            <div id="my-bookings-list">
+                <!-- Booking items rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Admin Tab ─────────────────────────────────────────────────────── -->
+    <div class="tab-content hidden" id="content-admin">
+        <div class="container">
+            <div class="section-header">
+                <h2>🛡️ Admin Dashboard</h2>
+            </div>
+
+            <div class="admin-grid">
+                <!-- Add Resource Form -->
+                <div class="card">
+                    <div class="card-header"><h3>➕ Add Resource</h3></div>
+                    <div class="card-body">
+                        <form id="add-resource-form">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" id="ar-name" class="form-control" placeholder="e.g., Seminar Room 101" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Type</label>
+                                    <select id="ar-type" class="form-control">
+                                        <option value="study_room">Study Room</option>
+                                        <option value="lab">Lab</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Capacity</label>
+                                    <input type="number" id="ar-capacity" class="form-control" min="1" value="10" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input type="text" id="ar-location" class="form-control" placeholder="Building, Floor, Room" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Equipment (comma-separated)</label>
+                                <input type="text" id="ar-tags" class="form-control" placeholder="Whiteboard, Projector, Computers">
+                            </div>
+                            <button type="submit" class="btn btn-success" style="width:100%;">Create Resource</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Block Slot Form -->
+                <div class="card">
+                    <div class="card-header"><h3>🔒 Block Time Slot</h3></div>
+                    <div class="card-body">
+                        <form id="block-slot-form">
+                            <div class="form-group">
+                                <label>Resource</label>
+                                <select id="block-resource" class="form-control">
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" id="block-date" class="form-control" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Start Time</label>
+                                    <input type="time" id="block-start" class="form-control" value="08:00" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>End Time</label>
+                                    <input type="time" id="block-end" class="form-control" value="10:00" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Purpose</label>
+                                <input type="text" id="block-purpose" class="form-control" placeholder="e.g., Lab Exam, Maintenance">
+                            </div>
+                            <button type="submit" class="btn btn-warning" style="width:100%;">Block Slot</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resource Management Table -->
+            <div class="mt-2">
+                <h3 class="mb-1">📦 Resource Management</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Capacity</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-resources-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- All Bookings Table -->
+            <div class="mt-2">
+                <h3 class="mb-1">📋 All Campus Bookings</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Resource</th>
+                                <th>User</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Purpose</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-bookings-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── Modal Container ───────────────────────────────────────────────────── -->
+<div id="modal-container"></div>
+
+<!-- ── Toast Container ───────────────────────────────────────────────────── -->
+<div id="toast-container" class="toast-container"></div>
+
+<!-- ── Scripts ────────────────────────────────────────────────────────────── -->
+<script src="./js/api.js"></script>
+<script src="./js/app.js"></script>
+</body>
+</html>
